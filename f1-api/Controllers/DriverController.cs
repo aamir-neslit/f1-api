@@ -57,6 +57,50 @@ namespace f1_api.Controllers
             return Ok(driver);
         }
 
+        [NonAction]
+        private string GetFilePath(string DriverName)
+        {
+            return _environment.WebRootPath + "\\Uploads\\Drivers\\" + DriverName;
+        }
+
+        [HttpPost("CreateAsync", Name = "CreateDriverAsync")]
+        public async Task<IActionResult> CreateAsync(Driver driver)
+        {
+            bool flag = false;
+            try
+            {
+                driver.Id = _drivers.Max(d => d.Id) + 1;
+
+                var _uploadedFiles = Request.Form.Files;
+                foreach (var source in _uploadedFiles)
+                {
+                    string Filename = source.FileName;
+                    string Filepath = GetFilePath(Filename);
+                    if (!Directory.Exists(Filepath))
+                    {
+                        Directory.CreateDirectory(Filepath);
+                    }
+                    string imagePath = Filepath + "\\image.png";
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                    using (FileStream stream = System.IO.File.Create(imagePath))
+                    {
+                        await source.CopyToAsync(stream);
+                        flag = true;
+                    }
+                }
+
+                _drivers.Add(driver);
+            }
+            catch (Exception e)
+            {
+
+            }
+            return CreatedAtRoute("GetDriverById", new { id = driver.Id }, driver);
+        }
+
         [HttpPost(Name = "CreateDriver")]
         public IActionResult Create(Driver driver)
         {
