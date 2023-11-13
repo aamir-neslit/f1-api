@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>f1_api</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Uploads\" />
+    <Folder Include="wwwroot\Uploads\Drivers\" />
+    <Folder Include="wwwroot\Uploads\Cars\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\" />
+    <Content Remove="wwwroot\Uploads\" />
+    <Content Remove="wwwroot\Uploads\Drivers\" />
+    <Content Remove="wwwroot\Uploads\Cars\" />
+  </ItemGroup>
+</Project>
